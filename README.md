@@ -6,13 +6,26 @@ for the filter.
 
 ## Reference
 ### Object function
-* https://arxiv.org/pdf/1912.08601v1.pdf
-* https://arxiv.org/pdf/1807.08855v1.pdf
+* Chen, Z., N. Ahmed, S. Julier and C. Heckman (2019). 
+"Kalman filter tuning with Bayesian optimization." 
+arXiv preprint arXiv:1912.08601.
+(https://arxiv.org/pdf/1912.08601v1.pdf)
+* Chen, Z., C. Heckman, S. Julier and N. Ahmed (2018). 
+Weak in the NEES?: Auto-tuning Kalman filters with Bayesian optimization. 
+2018 21st International Conference on Information Fusion (FUSION), IEEE.
+(https://arxiv.org/pdf/1807.08855v1.pdf)
 
 ### Optimization
-* https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization.pdf
-* https://github.com/hyperopt/hyperopt
-* http://proceedings.mlr.press/v28/bergstra13.pdf
+* Bergstra, J., R. Bardenet, Y. Bengio and B. Kégl (2011). 
+"Algorithms for hyper-parameter optimization." 
+Advances in neural information processing systems 24.
+(https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization.pdf)
+* [Hyperopt library](https://github.com/hyperopt/hyperopt)
+* Bergstra, J., Yamins, D., Cox, D. D. (2013) 
+Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures. 
+TProc. of the 30th International Conference on Machine Learning (ICML 2013), 
+June 2013, pp. I-115 to I-23.
+(http://proceedings.mlr.press/v28/bergstra13.pdf)
 
 ## Requirements
 ```
