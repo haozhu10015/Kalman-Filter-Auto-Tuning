@@ -6,7 +6,10 @@ for the filter.
 
 ## Reference
 
-
+* https://arxiv.org/pdf/1912.08601v1.pdf
+* https://arxiv.org/pdf/1807.08855v1.pdf
+* https://github.com/fmfn/BayesianOptimization
+* http://arxiv.org/pdf/1012.2599v1.pdf
 
 ## Requirements
 
