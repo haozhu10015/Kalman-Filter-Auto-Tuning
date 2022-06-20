@@ -56,9 +56,9 @@ class TrajSimulator1D:
 
         Returns
         -------
-        state: numpy.array()
+        state : numpy.array()
             Simulated trajectory (ground truth).
-        observation: numpy.array()
+        observation : numpy.array()
             Observation of the simulated trajectory.
         """
         # Simulate trajectory.
@@ -126,7 +126,7 @@ class KalmanFilterTuningModel:
 
         Returns
         -------
-        nis_loss: float
+        nis_loss : float
             Calculated value of object function.
         """
         self.kalman_filter.x = self.initial_state
