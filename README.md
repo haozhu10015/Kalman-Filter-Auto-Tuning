@@ -13,7 +13,7 @@ Given a Kalman filter
 **Predict**
 
 Predicted (a priori) state estimate	
-$\hat{x}_{k|k-1} = F_k \hat{x}_{k|k-1} + B_k u_k$
+$\hat{x}_{k|k-1} = F_k\hat{x}_{k|k-1}+B_ku_k$
 
 Predicted (a priori) estimate covariance
 $P_{k|k-1} = F_k P_{k|k-1} F_k^T + Q_k$
