@@ -1,0 +1,3 @@
+Optimal parameters:
+ q_var: 1237.1607079711189
+ r_var: 0.6674379274073956

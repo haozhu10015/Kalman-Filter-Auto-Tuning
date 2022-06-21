@@ -93,20 +93,24 @@ class KalmanFilterTuningModel:
         State Transition matrix
     H : numpy.array(dim_z, dim_x)
         Measurement function.
-    initial_state :  numpy.array(dim_x, 1)
+    initial_state :  list(numpy.array(dim_x, 1))
         Initial state estimate.
+        Each ndarray represents individual trajectory initial state.
     P : numpy.array(dim_x, dim_x)
         Current state covariance matrix.
-    observation : numpy.array(n, dim_z)
+    observation : list(numpy.array(n, dim_z))
         Observed trajectory.
+        Each ndarray represents individual trajectory.
     """
     def __init__(
             self,
             dim_x, dim_z,
             F, H, initial_state, P,
-            observation
+            observation,
     ):
         self.kalman_filter = KalmanFilter(dim_x, dim_z)
+        self.dim_x = dim_x
+        self.dim_z = dim_z
         self.kalman_filter.F = F
         self.kalman_filter.H = H
         self.initial_state = initial_state
@@ -129,16 +133,41 @@ class KalmanFilterTuningModel:
         nis_loss : float
             Calculated value of object function.
         """
-        self.kalman_filter.x = self.initial_state
-        self.kalman_filter.P = self.P
         self.kalman_filter.Q = Q
         self.kalman_filter.R = R
         nis_list = []
-        for i in range(len(self.observation)):
-            z = self.observation[i]
-            self.kalman_filter.predict()
-            self.kalman_filter.update(z)
-            nis_list.append(self.kalman_filter.y.T @ np.linalg.inv(self.kalman_filter.S) @ self.kalman_filter.y)
+        for traj_index, traj in enumerate(self.observation):
+            self.kalman_filter.x = self.initial_state[traj_index]
+            self.kalman_filter.P = self.P
+            for i in range(len(traj)):
+                z = traj[i]
+                self.kalman_filter.predict()
+                self.kalman_filter.update(z)
+                nis_list.append(self.kalman_filter.y.T @ np.linalg.inv(self.kalman_filter.S) @ self.kalman_filter.y)
 
-        return np.abs(np.log(np.mean(nis_list) / 2))
+        return np.abs(np.log(np.mean(nis_list) / self.dim_z))
+
+
+def build_4d_Q_matrix(dt, q_var):
+    """
+    Build the state noise covariance matrix for a 4-dimensional state motion model (x, dx, y, dy).
+
+    Parameters
+    ----------
+    dt : float
+        Observation sampling time interval.
+    q_var : float
+        This is used to scale the state noise covariance matrix Q.
+
+    Returns
+    -------
+    Q_matrix : numpy.array(4, 4)
+        State noise covariance matrix Q.
+    """
+    return q_var * np.array([
+        [dt ** 3 / 3, dt ** 2 / 2, 0, 0],
+        [dt ** 2 / 2, dt, 0, 0],
+        [0, 0, dt ** 3 / 3, dt ** 2 / 2],
+        [0, 0, dt ** 2 / 2, dt]
+    ])
 
