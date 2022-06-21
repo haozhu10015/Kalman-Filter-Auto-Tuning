@@ -34,6 +34,7 @@ filterpy==1.4.5
 numpy==1.22.4
 matplotlib==3.5.1
 hyperopt==0.2.7
+pandas==1.4.2
 ```
 To install the requirements:
 ```
