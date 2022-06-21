@@ -1,8 +1,8 @@
 # Kalman-Filter-Auto-Tuning
-In this repository we try to build a Kalman filter auto-tuning process.
+In this repository we try to build a Kalman filter auto-tuning process for filter 
+parameters: state noise covariance matrix (Q) and observation noise covariance matrix (R).
 Objective function is based on *normalized innovation error squared (NIS)*.
-Tree of Parzen Estimators (TPE) method is used to find the optimal parameters
-for the filter.
+Tree of Parzen Estimators (TPE) method is used to find the minimum value of the objective function.
 
 ## Reference
 ### Objective function
@@ -42,6 +42,14 @@ pip install -r requirements.txt
 ```
 
 ## Example
+In this example, we need to find the optimal Kalman filter parameters for smoothing the recorded *Drosophila* 
+trajectory in an arena.
+We already have several recorded trajectories (observations) which are consists of the X and Y position 
+(in pixel unit) of the fly in the arena.
+The basic idea is that we can first find the optimal filter parameters based on some recorded trajectories 
+through the auto-tuning procedure described above, and then test the filter performance on a test trajectory.
+Then the optimal parameters found can be used in the smoothing of other *Drosophila* trajectories.
+
 To run the example code, run *main.py*:
 ```
 python main.py --min_q_var=0 --max_q_var=5000 --min_r_var=0 --max_r_var=1 --epoch=100
