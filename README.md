@@ -41,4 +41,9 @@ To install the requirements:
 pip install -r requirements.txt
 ```
 
-
+## Example
+To run the example code for Kalman filter auto-tuning, run *main.py*:
+```
+python main.py --min_q_var=0 --max_q_var=5000 --min_r_var=0 --max_r_var=1 --epoch=100
+```
+Results can be found in the *output* folder.
