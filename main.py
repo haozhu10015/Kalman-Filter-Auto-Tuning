@@ -68,8 +68,8 @@ if __name__ == '__main__':
 
     # Build the optimizer.
     # Set Object function.
-    def J(args):
-        q_var, r_var = args
+    def J(optim_args):
+        q_var, r_var = optim_args
         Q = build_4d_Q_matrix(dt, q_var)
         R = np.eye(2) * r_var
         nis_loss = tuning_model.get_filter_nis_loss(Q, R)
