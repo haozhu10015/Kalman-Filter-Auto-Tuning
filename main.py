@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from utils import KalmanFilterTuningModel, build_4d_Q_matrix
-from hyperopt import hp, fmin, tpe
+from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
 from filterpy.kalman import KalmanFilter
 from filterpy.stats import plot_covariance
 import argparse
@@ -67,13 +67,13 @@ if __name__ == '__main__':
                                            observation=obs_traj)
 
     # Build the optimizer.
-    # Set Object function.
+    # Set Objective function.
     def J(optim_args):
         q_var, r_var = optim_args
         Q = build_4d_Q_matrix(dt, q_var)
         R = np.eye(2) * r_var
         nis_loss = tuning_model.get_filter_nis_loss(Q, R)
-        return nis_loss
+        return {'loss': nis_loss, 'status': STATUS_OK}
 
     # Set parameter space for searching.
     param_space = [
@@ -82,12 +82,19 @@ if __name__ == '__main__':
     ]
 
     # Run optimizer
-    optimal_param = fmin(J, param_space, algo=tpe.suggest, max_evals=args.epoch)
+    trials = Trials()
+    optimal_param = fmin(J, param_space, algo=tpe.suggest, max_evals=args.epoch, trials=trials)
 
-    print('Optimal parameters:\n q_var: {}\n r_var: {}'.format(optimal_param['q_var'], optimal_param['r_var']))
+    print('Optimal parameters:\n'
+          '\tq_var: {}\n\tr_var: {}\n'
+          'Minimum objective function value: {}'.format(optimal_param['q_var'], optimal_param['r_var'],
+                                                        np.min(trials.losses())))
     log_file = './output/log.txt'
     with open(log_file, 'w') as log_f:
-        print('Optimal parameters:\n q_var: {}\n r_var: {}'.format(optimal_param['q_var'], optimal_param['r_var']),
+        print('Optimal parameters:\n'
+              '\tq_var: {}\n\tr_var: {}\n'
+              'Minimum objective function value: {}'.format(optimal_param['q_var'], optimal_param['r_var'],
+                                                            np.min(trials.losses())),
               file=log_f)
 
     # ------ Testing ------
@@ -123,3 +130,4 @@ if __name__ == '__main__':
         plot_covariance((estimate_traj_mu.reshape(-1, 4)[i, 0], estimate_traj_mu.reshape(-1, 4)[i, 2]),
                         estimate_traj_cov[i, :2, :2])
     plt.savefig('./output/test_performance.png', dpi=600)
+

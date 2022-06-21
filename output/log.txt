@@ -1,3 +1,4 @@
 Optimal parameters:
- q_var: 1237.1607079711189
- r_var: 0.6674379274073956
+	q_var: 2857.51449511855
+	r_var: 0.24450910093652128
+Minimum objective function value: 0.002209050591748099

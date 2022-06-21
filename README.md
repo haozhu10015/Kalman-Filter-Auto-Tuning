@@ -1,11 +1,11 @@
 # Kalman-Filter-Auto-Tuning
 In this repository we try to build a Kalman filter auto-tuning process.
-Object function is based on *normalized innovation error squared (NIS)*.
+Objective function is based on *normalized innovation error squared (NIS)*.
 Tree of Parzen Estimators (TPE) method is used to find the optimal parameters
 for the filter.
 
 ## Reference
-### Object function
+### Objective function
 * Chen, Z., N. Ahmed, S. Julier and C. Heckman (2019). 
 "Kalman filter tuning with Bayesian optimization." 
 arXiv preprint arXiv:1912.08601.
