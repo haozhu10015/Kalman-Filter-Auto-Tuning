@@ -59,6 +59,7 @@ python main.py --min_q_var=0 --max_q_var=5000 --min_r_var=0 --max_r_var=1 --epoc
 Results can be found in the `output` folder.
 
 ## Thanks
-* *Drosophila* trajectory was recorded with [Strand Camera](https://strawlab.org/strand-cam/)
-  (GitHub repository: https://github.com/strawlab/strand-braid.git)
+* The *Drosophila* trajectory used in the example was recorded with [Strand Camera](https://strawlab.org/strand-cam/)
+([GitHub](https://github.com/strawlab/strand-braid.git))
+and provided by [@astraw](https://github.com/astraw).
 
