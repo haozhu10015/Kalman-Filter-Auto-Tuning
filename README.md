@@ -44,7 +44,7 @@ pip install -r requirements.txt
 ## Example
 In this example, we need to find the optimal Kalman filter parameters for smoothing the recorded *Drosophila* 
 trajectory in an arena.
-We already have several recorded trajectories (observations) which are consists of the X and Y position 
+We already have several recorded trajectories (observations) which are consists of the *x* and *y* position 
 (in pixel unit) of the fly in the arena.
 The basic idea is that we can first find the optimal filter parameters based on some recorded trajectories 
 through the auto-tuning procedure described above, and then test the filter performance on a test trajectory.
