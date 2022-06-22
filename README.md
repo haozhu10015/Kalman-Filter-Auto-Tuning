@@ -57,3 +57,8 @@ To run the example code, run [`main.py`](https://github.com/HaoZhu10015/Kalman-F
 python main.py --min_q_var=0 --max_q_var=5000 --min_r_var=0 --max_r_var=1 --epoch=100
 ```
 Results can be found in the `output` folder.
+
+## Thanks
+* *Drosophila* trajectory was recorded with [Strand Camera](https://strawlab.org/strand-cam/)
+  (GitHub repository: https://github.com/strawlab/strand-braid.git)
+
