@@ -2,6 +2,7 @@ import numpy as np
 import adskalman.adskalman as adskalman
 from filterpy.kalman import KalmanFilter
 
+
 def column(arr):
     """convert 1D array-like to a 2D vertical array
 
