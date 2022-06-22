@@ -1,0 +1,13 @@
+\section{Example: Finding the optimal Kalman filter parameters for fruit fly \textit{Drosophila melanogaster} trajectory smoothing}
+
+Suppose that we need to find the optimal Kalman filter parameters for smoothing the recorded \textit{Drosophila} 
+trajectory in an arena.
+We already have several recorded trajectories (observations) which are consists of the $x$ and $y$ position 
+(in pixel unit) of the fly in the arena.
+The basic idea is that we can first find the optimal filter parameters based on some recorded trajectories 
+through the auto-tuning procedure described above, and then test the filter performance on a test trajectory.
+Then the optimal parameters found can be used in the smoothing of other \textit{Drosophila} trajectories.
+
+\subsection{Build the Kalman filter}
+
+We consider a 4-dimensional state 

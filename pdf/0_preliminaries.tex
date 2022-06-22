@@ -1,0 +1,122 @@
+\section{Preliminaries}
+
+\subsection{Kalman Filter}
+
+A Kalman filter mainly consists of two steps:
+
+\underline{\bf \large Predict}
+
+Predicted ({\it a priori}) state estimate
+
+\begin{equation*}
+    \hat{x}_{k|k-1} = F_k \hat{x}_{k-1|k-1} + B_k u_k
+\end{equation*}
+
+Predicted ({\it a priori}) estimate covariance
+
+\begin{equation*}
+    P_{k|k-1} = F_k P_{k-1|k-1} F_k^T + Q_k
+\end{equation*}
+
+\underline{\bf \large Update} 
+
+Innovation pre-fit residual 
+
+\begin{equation*}
+    \tilde{y}_k = z_k - H_k \hat{x}_{k|k-1}
+\end{equation*}
+
+Innovation covariance 
+
+\begin{equation*}
+    S_k = H_k P_{k|k-1}H_k^T + R_k
+\end{equation*}
+
+Optimal Kalman gain 
+
+\begin{equation*}
+    K_k = P_{k|k-1}H_k^TS_k^{-1}
+\end{equation*}
+
+Updated ({\it a posteriori}) state estimate 
+
+\begin{equation*}
+    \hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \tilde{y}_k
+\end{equation*}
+
+Updated ({\it a posteriori}) estimate covariance
+
+\begin{equation*}
+    P_{k|k} = (I - K_k H_k)P_{k|k-1}
+\end{equation*}
+
+The performance of Kalman filter highly depends on the two parameters: 
+\begin{itemize}
+    \item State noise covariance matrix: $Q$ 
+    \item Observation noise covariance matrix: $R$
+\end{itemize}
+
+Our task is to establish an auto-tuning process to find the optimal value of these two parameters under a given situation.
+
+\textit{More details about Kalman filter see also \citep{faragher2012understanding}.}
+\subsection{Objective Function}
+
+Here we consider the Normalized Innovation Error Squared (NIS), which is computed from 
+
+\begin{equation*}
+    \epsilon_{z, k} = \tilde{y}_k^T S_{k|k-1}^{-1}\tilde{y}_k
+\end{equation*}
+
+It is often assumed that the prediction and observation errors are Gaussian. 
+So when the dynamical consistency conditions are met under the chosen parameters ($Q$ and $R$), $\epsilon_{z, k}$ will be $\chi ^2$-distributed random variables with $n_z$ degrees of freedom, i.e.:
+
+\begin{equation*}
+    E[\epsilon_{z, k}] \approx n_z
+\end{equation*}
+
+where $n_z$ refers to the measurement(observation)-vector dimension.
+Then an objective function for parameters tuning based on NIS can be build:
+
+\begin{equation*}
+    J_{NIS}(Q, R) = \left\lvert \log \left(\frac{\sum_{k=1}^T \epsilon_{z, k} / T}{n_z}\right)\right\rvert 
+\end{equation*}
+
+A close to zero value of this objective function will reveal a dynamical consistent estimation of the observations by the Kalman filter using the chosen parameters.
+
+\textit{More information see also \citep{chen2018weak}, \citep{chen2019kalman}.}
+
+\subsection{Optimization}
+
+Here we use the Tree-structured Parzen Estimators (TPE) algorithm for optimization. 
+TPE is a kind of Sequential Model-Based Optimization (SMBO) algorithm (Algorithm \ref{arg:smbo}) which iterates between fitting models and using the calculated objective function value to make choices about which parameters to investigate next.
+When the searching iteration ends, SMBO will return the parameters which generate the optimal objective function value.
+The main idea of TPE is similar to Bayesian optimization but the algorithm is different.
+This approach can find the optimal objective function value with out stuck in the local minimum (or maximum) as well but behaves better than Bayesian optimization with Gaussian process regression.
+
+\begin{algorithm}
+    \caption{
+        Sequential Model-Based Optimization (SMBO) \\
+        \bm{$R$} keeps track of all target algorithm runs performed so far and their performances (objective function value), 
+        $\mathcal{M}$ is SMBO's model, 
+        $\bm{\vec{\varTheta }}_{new}$ is a list of promising configurations. \\
+        (Modified from \citep{hutter2011sequential})
+        }
+    \label{arg:smbo}
+    \begin{algorithmic}[1]
+        \REQUIRE Target algorithm \textit{A} with parameter configuration space \bm{$\varTheta$}; instance set
+        $\varPi$; objective function $J$
+        \ENSURE Optimized (incumbent) parameter configuration, $\bm{\theta}_{inc}$
+        \STATE $[\bm{R}, \bm{\theta}_{inc}] \leftarrow Initialize(\bm{\varTheta}, \varPi)$
+        \REPEAT 
+            \STATE $\mathcal{M} \leftarrow FitModel(R)$
+            \STATE $\bm{\vec{\varTheta}}_{new} \leftarrow SelectConfigurations(\mathcal{M}, \bm{\theta}_{inc}, \bm{\varTheta})$
+            \STATE $[\bm{R}, \bm{\theta}_{inc}] \leftarrow Intensify(\bm{\vec{\varTheta}}_{new}, \bm{\theta}_{inc}, \mathcal{M}, \bm{R}, \varPi, J)$
+        \UNTIL {\it termination criteria met}
+        \RETURN $\bm{\theta}_{inc}$
+    \end{algorithmic}
+\end{algorithm}
+
+\textit{
+    More information about SMBO: \citep{hutter2011sequential}, 
+    and TPE: \citep{bergstra2011algorithms}.
+}
