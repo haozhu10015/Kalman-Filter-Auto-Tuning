@@ -50,7 +50,7 @@ The basic idea is that we can first find the optimal filter parameters based on 
 through the auto-tuning procedure described above, and then test the filter performance on a test trajectory.
 Then the optimal parameters found can be used in the smoothing of other *Drosophila* trajectories.
 
-More details see also [`Kalman-Filter-Auto-Tuning.pdf`](https://github.com/HaoZhu10015/Kalman-Filter-Auto-Tuning/blob/78a431b57432dccee71c014fe1b36cfc67761a66/pdf/Kalman-Filter-Auto-Tuning.pdf)
+More details see also [`Kalman-Filter-Auto-Tuning.pdf`](https://github.com/HaoZhu10015/Kalman-Filter-Auto-Tuning/blob/78a431b57432dccee71c014fe1b36cfc67761a66/pdf/Kalman-Filter-Auto-Tuning.pdf).
 
 To run the example code, run [`main.py`](https://github.com/HaoZhu10015/Kalman-Filter-Auto-Tuning/blob/b0a764f4451a35be123db7cd38203114184b29ab/main.py):
 ```
