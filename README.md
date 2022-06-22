@@ -50,8 +50,8 @@ The basic idea is that we can first find the optimal filter parameters based on 
 through the auto-tuning procedure described above, and then test the filter performance on a test trajectory.
 Then the optimal parameters found can be used in the smoothing of other *Drosophila* trajectories.
 
-To run the example code, run *main.py*:
+To run the example code, run `main.py`:
 ```
 python main.py --min_q_var=0 --max_q_var=5000 --min_r_var=0 --max_r_var=1 --epoch=100
 ```
-Results can be found in the *output* folder.
+Results can be found in the `output` folder.
