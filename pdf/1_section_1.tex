@@ -8,7 +8,7 @@ The basic idea is that we can first find the optimal filter parameters based on 
 through the auto-tuning procedure described above, and then test the filter performance on a test trajectory.
 Then the optimal parameters found can be used in the smoothing of other \textit{Drosophila} trajectories.
 
-\subsection{Designing Kalman Filters}
+\subsection{Designing Kalman Filter}
 
 Our observation of the fly position consists of a 2-dimensional vector $(x, y)$ which is recorded with a time interval of $\tau$.
 Taking the velocity of fly along the two axis into account, the state vector can be represented as a 4-dimensional vector\footnote{From here we start to use $\mathbf{x}$ for state vector and $x$ for coordinate.}:
@@ -76,7 +76,7 @@ The observation noise covariance matrix is then defined as
 where $\sigma^2_v$ represents the variance in the observation noise.
 Based on the design of motion and observation noise covariance matrix above we only need to optimize the scaler $\sigma^2_w$ and $\sigma^2_v$ later.
 
-Besides, we also need to specify the initial state ($\mathbf{x}_0$) and state covariance matrix $P_0$:
+Besides, we also need to specify the initial state ($\mathbf{x}_0$) and state covariance matrix ($P_0$):
 
 \begin{equation*}
     \mathbf{x}_0 = [x_0, 0, y_0, 0]^T
@@ -95,3 +95,40 @@ Besides, we also need to specify the initial state ($\mathbf{x}_0$) and state co
 \end{equation*}
 
 where $x_0$ and $y_0$ represent the initial observation of the fly position and we set $p=1000$ which is a scaler for $P_0$.
+
+
+\subsection{Performing Optimization}
+
+Since here we use more than one trajectories to find the optimal Kalman filter parameters, in each iteration, we calculate the respective objective function value for each trajectory and then take the average as the final ``loss'' for the batch of trajectories, i.e. 
+
+\begin{equation}
+    J_{NIS, batch}(Q, R) 
+    = \frac{1}{M} \sum_{m=1}^M J_{NIS, m}(Q, R) 
+    = \frac{1}{M} \sum_{m=1}^M \left\lvert \log \left(\frac{\sum_{k=1}^T \epsilon_{z, k, m} / T}{n_z}\right)\right\rvert
+\end{equation}
+
+where $M$ is the number of trajectories in the training set.
+
+Based on this process $\sigma^2_w$ and $\sigma^2_v$ is optimized to minimize the objective function value using TPE algorithm. 
+The entire flow of the optimization process is listed in Algorithm \ref{arg:optim}.
+
+\begin{algorithm}
+    \caption{
+            Optimizing the Kalman filter parameters. \\
+            $\bm{R}$ keeps track of all ``loss'' under each parameter configuration, 
+            $\bm{\vec{\varTheta}}_{init} \subset \bm{\varTheta}_{\sigma^2_w, \sigma^2_v}$ is used for initialize the TPE model.
+        }
+    \label{arg:optim}
+    \begin{algorithmic}[1]
+        \REQUIRE Kalman filter model $\varPi_{KF}$; parameter configuration space $\bm{\varTheta}_{\sigma^2_w, \sigma^2_v}$; objective function $J_{NIS, batch}$; batch of observations (trajectories) $X_{batch}$
+        \ENSURE Optimal parameter configuration $\bm{\theta}_{\sigma^2_w, \sigma^2_v, optim}$
+        \STATE Initialize TPE with $[\varPi_{KF}, \bm{\vec{\varTheta}}_{init}, X_{batch}]$
+        \WHILE {maximum iterations not reached}
+            \STATE $J_{NIS, batch} \leftarrow \varPi_{KF}(\bm{\theta}_{\sigma^2_w, \sigma^2_v}, X_{batch})$
+            \STATE $\bm{R} \Leftarrow J_{NIS, batch}$  
+            \STATE $\bm{\theta}_{\sigma^2_w, \sigma^2_v} \leftarrow$ Update TPE model with $\bm{R}$
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
+Python implementation and results of this example can be found in \href{https://github.com/HaoZhu10015/Kalman-Filter-Auto-Tuning/blob/9c6169a3c3f79520a67ddd6fd3b3b1a05f100a83/main.py}{\texttt{main.pdf}} and \texttt{output} directory of \href{https://github.com/HaoZhu10015/Kalman-Filter-Auto-Tuning}{https://github.com/HaoZhu10015/Kalman-Filter-Auto-Tuning}.
