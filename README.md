@@ -1,7 +1,7 @@
 # Kalman-Filter-Auto-Tuning
 In this repository we try to build a Kalman filter auto-tuning process for filter 
 parameters: state noise covariance matrix (*Q*) and observation noise covariance matrix (*R*).
-Objective function is based on *normalized innovation error squared (NIS)*.
+Objective function is based on Normalized Innovation Error Squared (NIS).
 Tree of Parzen Estimators (TPE) method is used to find the minimum value of the objective function.
 
 ## Reference
